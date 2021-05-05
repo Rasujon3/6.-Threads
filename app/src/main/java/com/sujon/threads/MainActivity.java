@@ -1,5 +1,6 @@
 package com.sujon.threads;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -10,6 +11,7 @@ public class MainActivity extends AppCompatActivity {
 
     TextView myTextView;
     EditText myEditText;
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,16 +24,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void OnButtonClick(View view){
-        synchronized (this){
-            try {
-                wait(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        MySecondThread myThread = new MySecondThread();
+        myThread.start();
+
+    }
+
+    public class MySecondThread extends Thread{
+        MySecondThread(){}
+
+
+        @Override
+        public void run() {
+            synchronized (this){
+                try {
+                    wait(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Log.i(TAG, "run: Command Executed !!");
             }
         }
-
-        myTextView.setText("Text Changed!!");
-
     }
 
 }
